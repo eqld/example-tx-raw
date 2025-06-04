@@ -1,0 +1,17 @@
+services:
+  postgres-example:
+    image: postgres:15-alpine
+    container_name: postgres_tx_raw_example
+    environment:
+      POSTGRES_USER: exampleuser
+      POSTGRES_PASSWORD: examplepassword
+      POSTGRES_DB: exampledb
+    ports:
+      - "54320:5432" # Using a non-standard host port to avoid conflicts
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U exampleuser -d exampledb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
